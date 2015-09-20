@@ -176,4 +176,5 @@ p1
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-11-1.png) 
+
 From the above, it does appear as though there are differences between weekday and weekend steps taken. The weekdays have a larger peak early in the day than do the weekend days and the weekend days have a peak late in the day (after 2000) that does not appear during the weekdays.
