@@ -159,9 +159,9 @@ p1 <- ggplot(df.plot, aes(x=interval, y = steps)) +
   facet_grid(Weekday~.) +
   geom_line(size=.5) + 
   theme_bw() +
-  xlab("Date") +
-  ylab("Quantity") + 
-  ggtitle("TF2 Trader Count by Week") + 
+  xlab("Time Interval") +
+  ylab("Average Steps Taken") + 
+  ggtitle("Differences in Weekdays and Weekends") + 
   theme(plot.title = element_text(lineheight=1, hjust = 0, family = "serif", face="bold", size = 19),
         legend.position="top",
         plot.title = element_text(size = rel(.5), color = "grey45",, family = "serif"),
