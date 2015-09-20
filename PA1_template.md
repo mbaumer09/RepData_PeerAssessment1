@@ -1,43 +1,54 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
 1. Load the data
-```{r}
+
+```r
 setwd("C:/Users/USER/Dropbox/Coursera/Reproducable Research/Project 1")
 df <- read.csv("activity.csv") #Load data
 ```
 
 2. Preprocess the data
-```{r}
-df.clean <- df[!is.na(df$steps),] #Clear out missing observations
 
+```r
+df.clean <- df[!is.na(df$steps),] #Clear out missing observations
 ```
 
 ## What is mean total number of steps taken per day?
 
 1. Calculate the total number of steps per day
-```{r}
+
+```r
 df.agg <- aggregate(steps ~ date, data = df.clean, FUN = sum) #Total number of steps per day
 ```
 
 2. Make a histogram of the total number of steps taken each day
-```{r}
+
+```r
 hist(df.agg$steps, main = "Histogram of Steps Taken Per Day", 
                    xlab = "Steps Taken",
                    breaks = 10)
 ```
 
-3. Calculate and report the mean and median of the total number of steps taken per day
-```{r}
-mean(df.agg$steps)
-median(df.agg$steps)
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
 
+3. Calculate and report the mean and median of the total number of steps taken per day
+
+```r
+mean(df.agg$steps)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
+median(df.agg$steps)
+```
+
+```
+## [1] 10765
 ```
 
 
@@ -45,7 +56,8 @@ median(df.agg$steps)
 
 1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
-```{r}
+
+```r
 df.agg.2 <- aggregate(steps ~ interval, data = df.clean, FUN = mean) #Mean of number of steps by time interval
 plot(x = df.agg.2$interval, y=df.agg.2$steps, type= "l",
       main = "Number of Steps Taken Over Time Interval Averaged Across Days",
@@ -53,24 +65,37 @@ plot(x = df.agg.2$interval, y=df.agg.2$steps, type= "l",
       xlab = "Time Interval")
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png) 
+
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
-```{r}
+
+```r
 df.agg.2$interval[df.agg.2$steps==max(df.agg.2$steps)] 
+```
+
+```
+## [1] 835
 ```
 
 
 ## Imputing missing values
 1. Calculate and report the total number of missing values in the dataset
-```{r}
+
+```r
 sum(is.na(df$steps))
+```
+
+```
+## [1] 2304
 ```
 
 2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
 
 3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
 
-```{r}
+
+```r
 #Going to use mean for the 5 minute time interval
 df.replacedNAs <- df
 NAindex <- which(is.na(df$steps))
@@ -83,22 +108,46 @@ for(i in NAindex){
 
 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
-```{r}
+
+```r
 df.agg <- aggregate(steps ~ date, data = df.replacedNAs, FUN = sum) #Total number of steps per day
 hist(df.agg$steps, main = "Histogram of Steps Taken Per Day", 
                    xlab = "Steps Taken",
                    breaks = 10)
-mean(df.agg$steps)
-median(df.agg$steps)
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
+
+```r
+mean(df.agg$steps)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
+median(df.agg$steps)
+```
+
+```
+## [1] 10766.19
 ```
 
 These did not have a difference on the mean or median because the imputation strategy involved replacing all the missing values with averaged values from other days. The histogram looks pretty much the same, as well, just taller at the mean.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r}
+
+```r
 library("ggplot2")
+```
+
+```
+## Warning: package 'ggplot2' was built under R version 3.2.2
+```
+
+```r
 df.replacedNAs$DayOfWeek <- factor(weekdays(as.Date(df.replacedNAs$date)))
 # Levels Saturday and Sunday correspond to 3 and 4 as integers
 df.replacedNAs$Weekday <- ifelse(as.integer(df.replacedNAs$DayOfWeek)==3|
@@ -110,9 +159,9 @@ p1 <- ggplot(df.plot, aes(x=interval, y = steps)) +
   facet_grid(Weekday~.) +
   geom_line(size=.5) + 
   theme_bw() +
-  xlab("Time Interval") +
-  ylab("Average Steps Taken") + 
-  ggtitle("Differences in Weekdays and Weekends") + 
+  xlab("Date") +
+  ylab("Quantity") + 
+  ggtitle("TF2 Trader Count by Week") + 
   theme(plot.title = element_text(lineheight=1, hjust = 0, family = "serif", face="bold", size = 19),
         legend.position="top",
         plot.title = element_text(size = rel(.5), color = "grey45",, family = "serif"),
@@ -125,3 +174,5 @@ p1 <- ggplot(df.plot, aes(x=interval, y = steps)) +
         panel.grid.major = element_line(colour = "grey45"))
 p1
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-11-1.png) 
